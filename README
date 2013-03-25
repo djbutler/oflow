@@ -6,7 +6,7 @@ Options:
   -h, --help        show this help message and exit
   -n N, --number=N  number of results to display
 
-Searchs stackoverflow for questions matching ARG, gets
+Searchs stackoverflow for questions matching QUERY, gets
 all answers to these questions, prints code snippets 
 from these answers.
 

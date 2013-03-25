@@ -53,7 +53,7 @@ def a_contains_code(QA):
 usage = "oflow.py [options] query"
 parser = OptionParser(usage = usage)
 parser.add_option("-n", "--number", dest="n", default=5,
-                  help="number of results to display", metavar="N", type="int")
+                  help="number of results to display [default: %default]", metavar="N", type="int")
 (options, args) = parser.parse_args()
 if len(args) == 0:
 	print(usage)

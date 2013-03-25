@@ -5,3 +5,10 @@ USAGE: python oflow.py <ARG>
 Searchs stackoverflow for questions matching ARG, gets
 all answers to these questions, prints code snippets 
 from these answers.
+
+EXAMPLES:
+
+python oflow.py "how do i access mysql from python"
+
+python oflow.py "python english dictionary"
+

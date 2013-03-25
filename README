@@ -12,3 +12,5 @@ python oflow.py "how do i access mysql from python"
 
 python oflow.py "python english dictionary"
 
+python oflow.py "c++ lambda" -n 1
+

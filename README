@@ -1,0 +1,5 @@
+README
+
+oflow.py
+usage: python oflow.py <ARG>
+functionality: Searchs stackoverflow for questions matching ARG, gets all answers to these questions, prints code snippets from these answers.

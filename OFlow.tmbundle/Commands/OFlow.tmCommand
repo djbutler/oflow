@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env python
+import sys, os, plistlib as plist
+sys.path.append(os.environ['TM_BUNDLE_SUPPORT'])
+import oflow
+import re
+
+query = sys.stdin.read()
+# print "query: " + query
+
+results = oflow.oflow_query(query)
+snippets = [oflow.extract_pre_blocks(a['body']) for (q,a) in results]
+snippets = [s for ss in snippets for s in ss] # flatten list of lists
+
+# escape troublesome '|' and ',' characters so Textmate snippets aren't cut off
+snippets = [re.sub('([|,])',r'\\\1', s) for s in snippets]
+
+# Textmate snippets require something like: '${1|foo,bar,foobar|}' to be printed to STDOUT
+print "${1|" + ",".join(snippets) + "|}" 
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>^~@o</string>
+	<key>name</key>
+	<string>OFlow</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>snippet</string>
+	<key>outputLocation</key>
+	<string>replaceInput</string>
+	<key>uuid</key>
+	<string>511632E1-D85C-4B5F-88DE-04A8C270108B</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>

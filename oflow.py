@@ -49,43 +49,53 @@ def print_q_and_a((question,answer)):
 def a_contains_code(QA):
 	return len(extract_pre_blocks(QA[1]['body'])) > 0
 
-# parse commandline arguments
-usage = "oflow.py [options] query"
-parser = OptionParser(usage = usage)
-parser.add_option("-n", "--number", dest="n", default=5,
-                  help="number of results to display [default: %default]", metavar="N", type="int")
-(options, args) = parser.parse_args()
-if len(args) == 0:
-	print(usage)
-	sys.exit(2)
+def oflow_query(query):
+	urls = google_search(query)
 
-# google stackoverflow for some phrase
-N = options.n
-query = " ".join(args)
-urls = google_search(query)
+	# extract the question ID's from the full URL's
+	question_ids = [url.split('/')[4] for url in urls]
 
-# extract the question ID's from the full URL's
-question_ids = [url.split('/')[4] for url in urls]
+	# get all the question-answer pairs
+	QAs = []
+	for q_id in question_ids:
+		# get question json data from api.stackexchange.com
+		q_json = get_question_json(q_id)
+		if len(q_json) == 0:
+			# question was probably deleted, so go to next question
+			continue
+		q_json = q_json[0]
+		# check that there were answers
+		if q_json.has_key('answers'):
+			QAs = QAs + [(q_json,answer) for answer in q_json['answers']]
 
-# get all the question-answer pairs
-QAs = []
-for q_id in question_ids:
-	# get question json data from api.stackexchange.com
-	q_json = get_question_json(q_id)
-	if len(q_json) == 0:
-		# question was probably deleted, so go to next question
-		continue
-	q_json = q_json[0]
-	# check that there were answers
-	if q_json.has_key('answers'):
-		QAs = QAs + [(q_json,answer) for answer in q_json['answers']]
+	# pick QAs with code
+	code_QAs = filter(a_contains_code, QAs)
 
-# pick QAs with code
-code_QAs = filter(a_contains_code, QAs)
+	# sort QAs by answer['up_vote_count']
+	sorted_QAs = sorted(code_QAs, key = lambda x: int(x[1]['up_vote_count']), reverse=True)
+	
+	return sorted_QAs
 
-# sort QAs by answer['up_vote_count']
-sorted_QAs = sorted(code_QAs, key = lambda x: int(x[1]['up_vote_count']), reverse=True)
 
-# print top N QAs
-for i in reversed(range(min(N,len(sorted_QAs)))):
-	print_q_and_a(sorted_QAs[i])
+# if run as script:
+if __name__ == "__main__":
+	
+	# parse commandline arguments
+	usage = "oflow.py [options] query"
+	parser = OptionParser(usage = usage)
+	parser.add_option("-n", "--number", dest="n", default=5,
+										help="number of results to display [default: %default]", metavar="N", type="int")
+	(options, args) = parser.parse_args()
+	if len(args) == 0:
+		print(usage)
+		sys.exit(2)
+
+	# google stackoverflow for some phrase
+	N = options.n
+	query = " ".join(args)
+
+	sorted_QAs = oflow_query(query)
+
+	# print top N QAs
+	for i in reversed(range(min(N,len(sorted_QAs)))):
+		print_q_and_a(sorted_QAs[i])

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>contactEmailRot13</key>
+	<string>ubyg.ot@tznvy.pbz</string>
+	<key>contactName</key>
+	<string>Brandon Holt</string>
+	<key>description</key>
+	<string>Textmate bundle that uses Dan's Oflow script to query StackOverflow for code snippets.</string>
+	<key>name</key>
+	<string>OFlow</string>
+	<key>uuid</key>
+	<string>29457124-F085-4DF5-A895-BFC4A93E5C7A</string>
+</dict>
+</plist>

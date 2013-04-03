@@ -8,6 +8,7 @@ import gzip
 import sys
 from StringIO import StringIO
 from optparse import OptionParser
+import os
 
 GOOGLE_QUERY = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&' + \
              'q=site:stackoverflow.com%2Fquestions+' + \
@@ -49,6 +50,10 @@ def print_q_and_a((question,answer)):
 def a_contains_code(QA):
 	return len(extract_pre_blocks(QA[1]['body'])) > 0
 
+def textmate_snippet((question,answer)):
+    question_info = "[ %s ] %s\n" % (answer['up_vote_count'],question['title'])
+    return question_info + "\n\n####\n\n".join(extract_pre_blocks(answer['body']))
+    
 def oflow_query(query):
 	urls = google_search(query)
 
@@ -57,13 +62,9 @@ def oflow_query(query):
 
 	# get all the question-answer pairs
 	QAs = []
-	for q_id in question_ids:
-		# get question json data from api.stackexchange.com
-		q_json = get_question_json(q_id)
-		if len(q_json) == 0:
-			# question was probably deleted, so go to next question
-			continue
-		q_json = q_json[0]
+	# get question json data from api.stackexchange.com
+	q_jsons = get_question_json(";".join(question_ids))
+	for q_json in q_jsons:
 		# check that there were answers
 		if q_json.has_key('answers'):
 			QAs = QAs + [(q_json,answer) for answer in q_json['answers']]

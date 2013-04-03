@@ -15,14 +15,14 @@ query = sys.stdin.read()
 # print "query: " + query
 
 results = oflow.oflow_query(query)
-snippets = [oflow.extract_pre_blocks(a['body']) for (q,a) in results]
-snippets = [s for ss in snippets for s in ss] # flatten list of lists
+snippets = [oflow.textmate_snippet((q,a)) for (q,a) in results]
+#snippets = [s for ss in snippets for s in ss] # flatten list of lists
 
 # escape troublesome '|' and ',' characters so Textmate snippets aren't cut off
-snippets = [re.sub('([|,])',r'\\\1', s) for s in snippets]
+snippets = [re.sub('([$|,])',r'\\\1', s) for s in snippets]
 
 # Textmate snippets require something like: '${1|foo,bar,foobar|}' to be printed to STDOUT
-print "${1|" + ",".join(snippets) + "|}" 
+print "${1|" + ",".join(snippets) + "|}"
 </string>
 	<key>input</key>
 	<string>selection</string>

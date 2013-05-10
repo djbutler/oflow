@@ -8,6 +8,7 @@ import gzip
 import sys
 from StringIO import StringIO
 from optparse import OptionParser
+import HTMLParser
 import os
 
 GOOGLE_QUERY = 'http://ajax.googleapis.com/ajax/services/search/web?v=1.0&rsz=8&' + \
@@ -62,7 +63,8 @@ def textmate_snippet((question,answer)):
             s += elt.get_text().strip() + "\n\n"
         else:
             s += comment_start + elt.get_text().strip() + comment_end + "\n\n"
-    return question_info + s
+    h = HTMLParser.HTMLParser()
+    return h.unescape(question_info + s)
     
 def oflow_query(query):
 	urls = google_search(query)

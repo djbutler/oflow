@@ -38,6 +38,7 @@ def get_question_json(question_id):
 def extract_pre_blocks(html):
 	return [code.get_text().strip() for code in BeautifulSoup(html).find_all('pre')]
 
+# Creates display text for the console
 def print_q_and_a((question,answer)):
 	question_info = "######## [ %s votes ] %s ########" % (answer['up_vote_count'],question['title'])
 	pre_blocks = extract_pre_blocks(answer['body'])
@@ -50,9 +51,18 @@ def print_q_and_a((question,answer)):
 def a_contains_code(QA):
 	return len(extract_pre_blocks(QA[1]['body'])) > 0
 
+# Creates display text for the TextMate
 def textmate_snippet((question,answer)):
     question_info = "[ %s ] %s\n" % (answer['up_vote_count'],question['title'])
-    return question_info + "\n\n####\n\n".join(extract_pre_blocks(answer['body']))
+    comment_start = os.environ['TM_COMMENT_START'] if os.environ.has_key('TM_COMMENT_START') else ""
+    comment_end = os.environ['TM_COMMENT_END'] if os.environ.has_key('TM_COMMENT_END') else ""
+    s = ""
+    for elt in BeautifulSoup(answer['body']).find_all(['p','pre']):
+        if elt.name=='pre':
+            s += elt.get_text().strip() + "\n\n"
+        else:
+            s += comment_start + elt.get_text().strip() + comment_end + "\n\n"
+    return question_info + s
     
 def oflow_query(query):
 	urls = google_search(query)

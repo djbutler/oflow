@@ -33,7 +33,7 @@ print ("${1|" + ",".join(snippets) + "|}").encode('ascii', 'ignore')
 	<key>name</key>
 	<string>OFlow</string>
 	<key>outputCaret</key>
-	<string>afterOutput</string>
+	<string>selectOutput</string>
 	<key>outputFormat</key>
 	<string>snippet</string>
 	<key>outputLocation</key>

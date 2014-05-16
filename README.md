@@ -1,4 +1,6 @@
-Oflow
+**oflow**
+
+Find code snippets on Stack Overflow with lightning speed.
 
 ```
 Usage: oflow.py [options] query

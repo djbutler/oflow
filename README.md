@@ -2,6 +2,8 @@
 
 Find code snippets on Stack Overflow with lightning speed.
 
+Accessible from the command line or a TextMate bundle.
+
 ```
 Usage: oflow.py [options] query
 
